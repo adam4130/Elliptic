@@ -16,6 +16,7 @@ namespace elliptic {
         int getA() const { return a_; }
         int getB() const { return b_; }
         mpz_class getPrime() const { return prime_; }
+        mpz_class getOrder();
 
         bool hasPoint(const Point& p);
 

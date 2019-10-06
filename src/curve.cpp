@@ -7,6 +7,14 @@ elliptic::Curve::Curve(int a, int b, mpz_class prime) {
 }
 
 /**
+ * Computes the order of this curve in O(log^8 p) time with Schoof's algorithm.
+ */
+mpz_class getOrder() {
+    // TODO Implement Schoof's algorithm
+    return 0;
+}
+
+/**
  * Checks if the given point is on the curve, y^2 = x^3 + ax + b (mod p).
  */
 bool elliptic::Curve::hasPoint(const Point& p) {
