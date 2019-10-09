@@ -9,7 +9,7 @@ SRC := $(wildcard $(SRC_DIR)/*.$(EXT))
 OBJ := $(SRC:$(SRC_DIR)/%.$(EXT)=$(BUILD_DIR)/%.o)
 
 CXX_FLAGS := -Wall -g
-LIB_FLAGS := -lgmpxx -lgmp
+LIB_FLAGS := -lgmpxx -lgmp -lcrypto
 INC := -I include
 
 TARGET := elliptic
