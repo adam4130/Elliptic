@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "babygiant.h"
 
 using namespace std;

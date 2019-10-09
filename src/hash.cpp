@@ -1,14 +1,16 @@
 #include "hash.h"
 
-#include <iomanip> // std::setw(int)
-#include <sstream> // std::stringstream()
+#include <cctype>    // std::isxdigit
+#include <iomanip>   // std::setfill, std::setw
+#include <iostream>  // std::hex
+#include <sstream>   // std::stringstream
+#include <stdexcept> // std::invalid_argument
 
 #include <openssl/sha.h>
 #include <openssl/ripemd.h>
 
 /**
- * Converts a hexadecimal string to a uint8_t (byte) array pointer. The size
- * of the array is set to the given length reference. 
+ * Converts a hexadecimal string to a uint8_t (byte) vector.
  */
 std::vector<uint8_t> elliptic::Hash::hexToByte(const std::string& input) {
     if (input.length() % 2 != 0) {
@@ -18,7 +20,12 @@ std::vector<uint8_t> elliptic::Hash::hexToByte(const std::string& input) {
     int length = input.length() / 2;
     std::vector<uint8_t> output(length); 
     for (int i = 0; i < length; i++) {
-        output.push_back(std::stoi(input.substr(i * 2, 2), 0, 16));
+        std::string value = input.substr(i * 2, 2);
+        if (!std::isxdigit(value[0]) || !std::isxdigit(value[1])) {
+            throw std::invalid_argument("Input is not a valid hexadecimal string");
+        }
+
+        output.push_back(std::stoi(value, 0, 16));
     }
 
     return output;

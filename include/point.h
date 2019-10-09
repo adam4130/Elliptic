@@ -1,7 +1,7 @@
 #ifndef POINT_H
 #define POINT_H 
 
-#include <iostream>
+#include <ostream>
 
 #include <gmpxx.h>
 
