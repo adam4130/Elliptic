@@ -18,7 +18,8 @@ std::vector<uint8_t> elliptic::Hash::hexToByte(const std::string& input) {
     }
 
     int length = input.length() / 2;
-    std::vector<uint8_t> output(length); 
+    std::vector<uint8_t> output; 
+    output.reserve(length);
     for (int i = 0; i < length; i++) {
         std::string value = input.substr(i * 2, 2);
         if (!std::isxdigit(value[0]) || !std::isxdigit(value[1])) {

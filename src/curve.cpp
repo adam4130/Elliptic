@@ -18,7 +18,7 @@ bool elliptic::Curve::hasPoint(const Point& p) {
     mpz_powm_ui(right.get_mpz_t(), p.getX().get_mpz_t(), 3, prime_.get_mpz_t());
     right += a_*p.getX() + b_;
     mpz_mod(right.get_mpz_t(), right.get_mpz_t(), prime_.get_mpz_t());
-     
+
     return cmp(left, right) == 0;
 }
 

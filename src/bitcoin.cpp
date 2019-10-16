@@ -96,7 +96,7 @@ bool elliptic::Bitcoin::validPrivateHex(const std::string& privateKey) {
     }
 
     // 0 < key < N (order)
-    if (sgn(key) <= 0 || cmp(key, curve_.getOrder()) >= 0) {
+    if (sgn(key) <= 0 || cmp(key, curve_->getOrder()) >= 0) {
         return false;
     }
 
@@ -152,7 +152,8 @@ bool elliptic::Bitcoin::getPoint(const std::string& publicKey, Point& p) {
         return false;
     }
 
-    if (!curve_.hasPoint(Point(x, y))) {
+    p = Point(x, y);
+    if (!curve_->hasPoint(p)) {
         return false;
     }
 
@@ -219,10 +220,10 @@ std::string elliptic::Bitcoin::privateHexToPublicKey(const std::string& privateK
     reverse(binary.begin(), binary.end()); 
     for (char bit : binary) { 
         if (bit == '1') {
-            p = curve_.add(p, G);      
+            p = curve_->add(p, G);
         }
 
-        G = curve_.multiply(G);
+        G = curve_->multiply(G);
     }
 
     std::string publicKey = "04" + pad(p.getX().get_str(16), HEX_LENGTH) 
@@ -272,11 +273,11 @@ std::string elliptic::Bitcoin::uncompressPublicKey(const std::string& compressed
         throw std::invalid_argument("Compressed hexadecimal public key is invalid");
     }
 
-    P = curve_.getPrime();
+    P = curve_->getPrime();
     mpz_powm_ui(r.get_mpz_t(), x.get_mpz_t(), 3, P.get_mpz_t());
-    r += curve_.getA()*x + curve_.getB();
+    r += curve_->getA()*x + curve_->getB();
     mpz_mod(r.get_mpz_t(), r.get_mpz_t(), P.get_mpz_t());
-    y = curve_.squareRoot(r);
+    y = curve_->squareRoot(r);
 
     bool even = mpz_even_p(y.get_mpz_t()) != 0;
     if ((compression == '2' && !even) || (compression == '3' && even)) {
@@ -284,7 +285,7 @@ std::string elliptic::Bitcoin::uncompressPublicKey(const std::string& compressed
         mpz_mod(y.get_mpz_t(), y.get_mpz_t(), P.get_mpz_t());
     }
 
-    if (!curve_.hasPoint(Point(x, y))) {
+    if (!curve_->hasPoint(Point(x, y))) {
         throw std::invalid_argument("Public key is not on curve");
     }
 
