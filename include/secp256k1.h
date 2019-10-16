@@ -6,15 +6,16 @@
 namespace elliptic {
 
     class Secp256k1 : public Curve {
-        private:
+    private:
         static const int A, B;
         static const std::string PRIME, ORDER;
 
-        public:
-        Secp256k1() : Curve(A, B, getPrime()) {}
+        mpz_class convertHex(const std::string& hexString) const;
 
-        mpz_class getPrime();
-        mpz_class getOrder();
+    public:
+        Secp256k1() : Curve(A, B, convertHex(PRIME)) {}
+
+        mpz_class getOrder() const { return convertHex(ORDER); };
     };
     
 }

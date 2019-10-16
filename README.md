@@ -3,8 +3,8 @@ Elliptic curve library
 
 ### Prerequisites/Installation
 
-Requires GMP which can be installed on Debian based systems with:
+Requires GMP and OpenSSL which can be installed on Debian based systems with:
 
 ```
-sudo apt install libgmp-dev
+sudo apt install libgmp-dev openssl-dev
 ```

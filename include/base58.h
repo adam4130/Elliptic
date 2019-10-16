@@ -5,9 +5,14 @@
 
 namespace elliptic {
   
-    bool isBase58(const std::string& input);
-    std::string hexToBase58(const std::string& input);
-    std::string base58ToHex(const std::string& input); 
+    class Base58 {
+    private:
+        static const std::string BASE58;
+
+    public:
+        std::string hexToBase58(const std::string& input);
+        std::string base58ToHex(const std::string& input); 
+    };
 
 }
 

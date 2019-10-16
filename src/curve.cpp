@@ -1,15 +1,9 @@
 #include "curve.h"
 
-elliptic::Curve::Curve(int a, int b, mpz_class prime) {
-    a_ = a;
-    b_ = b;
-    prime_ = prime;
-}
-
 /**
  * Computes the order of this curve in O(log^8 p) time with Schoof's algorithm.
  */
-mpz_class getOrder() {
+mpz_class elliptic::Curve::getOrder() const {
     // TODO Implement Schoof's algorithm
     return 0;
 }
@@ -24,7 +18,7 @@ bool elliptic::Curve::hasPoint(const Point& p) {
     mpz_powm_ui(right.get_mpz_t(), p.getX().get_mpz_t(), 3, prime_.get_mpz_t());
     right += a_*p.getX() + b_;
     mpz_mod(right.get_mpz_t(), right.get_mpz_t(), prime_.get_mpz_t());
-
+     
     return cmp(left, right) == 0;
 }
 

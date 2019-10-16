@@ -1,17 +1,15 @@
 #include <iostream>
 
-#include "babygiant.h"
+#include "bitcoin.h"
 
 using namespace std;
 using namespace elliptic;
 
 int main() {
 
-    Curve curve = Curve(0, 7, 37);
-    Point p = Point(6, 1);
-    Point q = Point(8, 1);
-
-    cout << p << " + " << q << " = " << curve.add(p, q) << endl;
+    string privateHex = "E9873D79C6D87DC0FB6A5778633389F4453213303DA61F20BD67FC233AA33262";
+    Bitcoin bitcoin;
+    cout << bitcoin.privateHexToPublicKey(privateHex, false) << endl;
 
     return 0;
 }
