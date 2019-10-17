@@ -14,27 +14,27 @@ const std::string elliptic::Bitcoin::BASE_POINT = "0479BE667EF9DCBBAC55A06295CE8
  * Generates a paper wallet PDF using LaTeX from a given private key.
  */
 void elliptic::Bitcoin::paperWallet(const std::string& privateKey, bool compressed) {
-  std::string privateHex = convertToPrivateHex(privateKey);
-  std::string publicKey = privateHexToPublicKey(privateHex, compressed); 
-  std::string address = publicKeyToAddress(publicKey);
-  std::string WIF = privateHexToWIF(privateHex, compressed);
+    std::string privateHex = convertToPrivateHex(privateKey);
+    std::string publicKey = privateHexToPublicKey(privateHex, compressed);
+    std::string address = publicKeyToAddress(publicKey);
+    std::string WIF = privateHexToWIF(privateHex, compressed);
 
-  std::string command = "cd LaTeX/; sh generate.sh " + address + " " + WIF;
-  if (std::system(command.c_str()) != 0) {
-    throw std::runtime_error("Unable to generate paper wallet");
-  }
+    std::string command = "cd LaTeX/; sh generate.sh " + address + " " + WIF;
+    if (std::system(command.c_str()) != 0) {
+        throw std::runtime_error("Unable to generate paper wallet");
+    }
 }
 
 /**
  * Generates a hexadecimal private key using the OpenSSL library.
  */
 std::string elliptic::Bitcoin::generatePrivateHex() {
-  std::string privateKey = hash_.getRandom(HEX_LENGTH / 2); 
-  if (!validPrivateHex(privateKey)) {
-    throw std::runtime_error("Generated private key is invalid");
-  }
+    std::string privateKey = hash_.getRandom(HEX_LENGTH / 2);
+    if (!validPrivateHex(privateKey)) {
+        throw std::runtime_error("Generated private key is invalid");
+    }
 
-  return toUpperCase(privateKey);
+    return toUpperCase(privateKey);
 }
 
 /**
