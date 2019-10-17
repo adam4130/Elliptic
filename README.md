@@ -12,7 +12,7 @@ for large integers. Finally, LaTeX is required to generate paper wallet PDFs.
 To install OpenSSL, GMP and LaTeX on Debian based systems:
 
 ```
-sudo apt install libssl-dev libgmp3-dev texlive-full 
+sudo apt install libssl-dev libgmp-dev texlive-full
 ```
 
 For Gentoo Linux, the `xetex` USE flag for `app-text/texlive` must be enabled. 
