@@ -1,6 +1,7 @@
 #ifndef HASH_H
 #define HASH_H
 
+#include <cstddef> // size_t
 #include <cstdint> // uint_8
 #include <string>
 #include <vector>
@@ -15,6 +16,8 @@ namespace elliptic {
     public:
         std::string sha256(const std::string& input);
         std::string ripemd160(const std::string& input);
+
+        std::string getRandom(size_t bytes);
     };
 
 }

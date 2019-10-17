@@ -1,0 +1,33 @@
+\documentclass{article}
+
+\nonstopmode
+\batchmode
+
+\usepackage[margin=0.5in]{geometry}
+\usepackage{overpic}
+\usepackage{pst-barcode}
+
+\usepackage[scaled]{helvet}
+\renewcommand\familydefault{\sfdefault} 
+\usepackage[T1]{fontenc}
+
+\newcommand\size{1.13}
+
+\begin{document}
+    \begin{overpic}[height=2in]{images/background}
+        \put (3.65,3.51) {%
+        \begin{pspicture}(\size in, \size in)
+            \psbarcode{\address}{width=\size\ height=\size}{qrcode}
+        \end{pspicture}}
+
+        \put (53.65,3.51) {%
+        \begin{pspicture}(\size in, \size in)
+            \psbarcode{\private}{width=\size\ height=\size}{qrcode}
+        \end{pspicture}}
+
+        \fontsize{9}{9}
+        \put (11.51,22) {\textbf{\address}}
+        \fontsize{6}{6}
+        \put (61.51,22.2) {\textbf{\private}}
+    \end{overpic}
+\end{document}

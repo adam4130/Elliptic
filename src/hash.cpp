@@ -7,6 +7,7 @@
 #include <stdexcept> // std::invalid_argument
 
 #include <openssl/sha.h>
+#include <openssl/rand.h>
 #include <openssl/ripemd.h>
 
 /**
@@ -72,4 +73,16 @@ std::string elliptic::Hash::ripemd160(const std::string& input) {
     RIPEMD160_Final(output, &ctx); 
 
     return byteToHex(output, RIPEMD160_DIGEST_LENGTH); 
+}
+
+/**
+ * Generates a hexadecimal string of random bytes using the OpenSSL library.
+ */
+std::string elliptic::Hash::getRandom(size_t bytes) {
+    uint8_t buf[bytes];
+    if (RAND_bytes(buf, bytes) != 1) {
+        throw std::runtime_error("OpenSSL unable to generate random bytes");
+    }
+
+    return byteToHex(buf, bytes); 
 }

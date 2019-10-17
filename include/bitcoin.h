@@ -28,7 +28,10 @@ namespace elliptic {
     public:
         Bitcoin() : curve_(new Secp256k1()) {}
         ~Bitcoin() { delete curve_; }
-
+        
+        void paperWallet(const std::string& privateKey, bool compressed);
+        
+        std::string generatePrivateHex();
         std::string convertToPrivateHex(const std::string& privateKey);
         std::string privateHexToWIF(const std::string& privateKey, bool compressed);
         std::string privateHexToPublicKey(const std::string& privateKey, bool compressed);
