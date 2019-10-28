@@ -11,7 +11,7 @@ namespace elliptic {
         mpz_class prime_;
 
     public:
-        Curve(int a, int b, mpz_class prime) : a_(a), b_(b), prime_(prime) {} 
+        Curve(int a, int b, mpz_class prime);
         virtual ~Curve() {}
 
         int getA() const { return a_; }
@@ -24,6 +24,7 @@ namespace elliptic {
 
         Point add(Point p, Point q);
         Point multiply(Point p);
+        Point multiply(Point p, mpz_class n);
 
         mpz_class inverse(const mpz_class& op);
         mpz_class squareRoot(const mpz_class& op);

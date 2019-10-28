@@ -1,5 +1,21 @@
 #include "curve.h"
 
+#include <algorithm> // std::reverse
+#include <cmath>     // std::pow
+#include <stdexcept> // std::invalid_argument
+
+elliptic::Curve::Curve(int a, int b, mpz_class prime) {
+    this->a_ = a;
+    this->b_ = b;
+    this->prime_ = prime;
+
+    // \delta = 4a^3 + 27b^2
+    double discriminant = 4*std::pow(a_, 3) + 27*std::pow(b_, 2);
+    if (std::abs(discriminant) < 1e-12) {
+        throw std::invalid_argument("Discriminant must be non-zero");
+    }
+}
+
 /**
  * Computes the order of this curve in O(log^8 p) time with Schoof's algorithm.
  */
@@ -27,7 +43,7 @@ bool elliptic::Curve::hasPoint(const Point& p) {
  */
 elliptic::Point elliptic::Curve::add(Point p, Point q) {
     // p = q
-    if (p.equals(q)) {
+    if (p == q) {
         return multiply(p);
     }
 
@@ -83,6 +99,30 @@ elliptic::Point elliptic::Curve::multiply(Point p) {
     mpz_mod(y.get_mpz_t(), y.get_mpz_t(), prime_.get_mpz_t());
 
     return Point(x, y);
+}
+
+/**
+ * Computes q = np where n is a natural number greater than zero and p is point
+ * on the curve, y^2 = x^3 + ax + b (mod p).
+ */
+elliptic::Point elliptic::Curve::multiply(Point p, mpz_class n) {
+    if (sgn(n) <= 0) {
+        throw std::invalid_argument("n must be greater than 0");
+    }
+
+    std::string binary = n.get_str(2);
+    std::reverse(binary.begin(), binary.end());
+
+    Point q;
+    for (char bit : binary) {
+        if (bit == '1') {
+            q = add(q, p);
+        }
+
+        p = multiply(p);
+    }
+
+    return q;
 }
 
 /**

@@ -240,19 +240,12 @@ std::string elliptic::Bitcoin::privateHexToPublicKey(const std::string& privateK
     key.set_str(privateKey, 16);
     std::string binary = key.get_str(2); 
 
-    Point p, G; 
+    Point G;
     if (!getPoint(BASE_POINT, G)) {
         throw std::invalid_argument("Can't retrieve the base point");
     } 
 
-    reverse(binary.begin(), binary.end()); 
-    for (char bit : binary) { 
-        if (bit == '1') {
-            p = curve_->add(p, G);
-        }
-
-        G = curve_->multiply(G);
-    }
+    Point p = curve_->multiply(G, key);
 
     std::string publicKey = "04" + pad(p.getX().get_str(16), HEX_LENGTH) 
         + pad(p.getY().get_str(16), HEX_LENGTH);
