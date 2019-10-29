@@ -1,7 +1,7 @@
 #ifndef POINT_H
 #define POINT_H 
 
-#include <ostream>
+#include <ostream> // std::ostream
 
 #include <gmpxx.h>
 
@@ -12,10 +12,10 @@ namespace elliptic {
         mpz_class x_, y_;
 
     public:
-        Point();
-        Point(mpz_class x, mpz_class y);
+        Point() : x_(0), y_(0) {}
+        Point(mpz_class x, mpz_class y) : x_(x), y_(y) {}
 
-        bool isZero();
+        bool isZero() const { return sgn(x_) == 0 && sgn(y_) == 0; }
 
         mpz_class getX() const { return x_; }
         mpz_class getY() const { return y_; }
@@ -25,6 +25,9 @@ namespace elliptic {
 
     std::ostream& operator<<(std::ostream& out, const Point& p);
 
+    struct PointHasher {
+        std::size_t operator()(const Point& p) const;
+    };
 }
 
 #endif
