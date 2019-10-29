@@ -20,14 +20,15 @@ namespace elliptic {
         mpz_class getPrime() const { return prime_; }
         virtual mpz_class getOrder() const;
 
-        bool hasPoint(const Point& p);
+        bool hasPoint(const Point& p) const;
+        Point negatePoint(const Point &p) const;
 
-        Point add(Point p, Point q);
-        Point multiply(Point p);
-        Point multiply(Point p, mpz_class n);
+        Point add(Point p, Point q) const;
+        Point multiply(Point p) const;
+        Point multiply(Point p, mpz_class n) const;
 
-        mpz_class inverse(const mpz_class& op);
-        mpz_class squareRoot(const mpz_class& op);
+        mpz_class inverse(const mpz_class& op) const;
+        mpz_class squareRoot(const mpz_class& op) const;
     };
 
 }

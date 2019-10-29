@@ -236,19 +236,19 @@ std::string elliptic::Bitcoin::privateHexToPublicKey(const std::string& privateK
         throw std::invalid_argument("Private key is invalid"); 
     }
 
-    mpz_class key; 
-    key.set_str(privateKey, 16);
-    std::string binary = key.get_str(2); 
+    mpz_class k;
+    k.set_str(privateKey, 16);
 
     Point G;
     if (!getPoint(BASE_POINT, G)) {
         throw std::invalid_argument("Can't retrieve the base point");
     } 
 
-    Point p = curve_->multiply(G, key);
+    // P = kG
+    Point P = curve_->multiply(G, k);
 
-    std::string publicKey = "04" + pad(p.getX().get_str(16), HEX_LENGTH) 
-        + pad(p.getY().get_str(16), HEX_LENGTH);
+    std::string publicKey = "04" + pad(P.getX().get_str(16), HEX_LENGTH)
+        + pad(P.getY().get_str(16), HEX_LENGTH);
 
     if (compressed) {
         publicKey = compressPublicKey(publicKey);

@@ -27,7 +27,7 @@ mpz_class elliptic::Curve::getOrder() const {
 /**
  * Checks if the given point is on the curve, y^2 = x^3 + ax + b (mod p).
  */
-bool elliptic::Curve::hasPoint(const Point& p) {
+bool elliptic::Curve::hasPoint(const Point& p) const {
     mpz_class left, right;
     mpz_powm_ui(left.get_mpz_t(), p.getY().get_mpz_t(), 2, prime_.get_mpz_t()); 
 
@@ -39,14 +39,19 @@ bool elliptic::Curve::hasPoint(const Point& p) {
 }
 
 /**
+ * Negates a point the curve i.e., p = (x, y) => -p = (x, -y).
+ */
+elliptic::Point elliptic::Curve::negatePoint(const Point &p) const {
+    mpz_class y = -p.getY();
+    mpz_mod(y.get_mpz_t(), y.get_mpz_t(), prime_.get_mpz_t());
+
+    return Point(p.getX(), y);
+}
+
+/**
  * Adds two Points on the curve, y^2 = x^3 + ax + b (mod p).
  */
-elliptic::Point elliptic::Curve::add(Point p, Point q) {
-    // p = q
-    if (p == q) {
-        return multiply(p);
-    }
-
+elliptic::Point elliptic::Curve::add(Point p, Point q) const {
     // p + 0 = p
     if (q.isZero()) { 
         return p;
@@ -55,6 +60,16 @@ elliptic::Point elliptic::Curve::add(Point p, Point q) {
     // q + 0 = q
     if (p.isZero()) {
         return q;
+    }
+
+    if (cmp(p.getX(), q.getX()) == 0) {
+        // p = q
+        if (cmp(p.getY(), q.getY()) == 0) {
+            return multiply(p);
+        }
+
+        // p = -q
+        return Point();
     }
 
     mpz_class x, y, lambda, num, denom;
@@ -77,7 +92,7 @@ elliptic::Point elliptic::Curve::add(Point p, Point q) {
 /**
  * Doubles a Point on the curve, y^2 = x^3 + ax + b (mod p).
  */
-elliptic::Point elliptic::Curve::multiply(Point p) {
+elliptic::Point elliptic::Curve::multiply(Point p) const {
     if (p.isZero()) {
         return p;
     }
@@ -105,7 +120,7 @@ elliptic::Point elliptic::Curve::multiply(Point p) {
  * Computes q = np where n is a natural number greater than zero and p is point
  * on the curve, y^2 = x^3 + ax + b (mod p).
  */
-elliptic::Point elliptic::Curve::multiply(Point p, mpz_class n) {
+elliptic::Point elliptic::Curve::multiply(Point p, mpz_class n) const {
     if (sgn(n) <= 0) {
         throw std::invalid_argument("n must be greater than 0");
     }
@@ -128,7 +143,7 @@ elliptic::Point elliptic::Curve::multiply(Point p, mpz_class n) {
 /**
  * Finds the inverse mod p using Fermat's little theorem.
  */
-mpz_class elliptic::Curve::inverse(const mpz_class& op) {
+mpz_class elliptic::Curve::inverse(const mpz_class& op) const {
     if (mpz_divisible_p(op.get_mpz_t(), prime_.get_mpz_t()) != 0) {
         throw std::invalid_argument("Inverse does not exist"); 
     }
@@ -142,7 +157,7 @@ mpz_class elliptic::Curve::inverse(const mpz_class& op) {
 /**
  * Finds the square root mod p. Only valid for p \equiv 3 (mod 4).
  */
-mpz_class elliptic::Curve::squareRoot(const mpz_class& op) {
+mpz_class elliptic::Curve::squareRoot(const mpz_class& op) const {
     if (mpz_fdiv_ui(prime_.get_mpz_t(), 4) != 3) {
         throw std::invalid_argument("P != 3 (mod 4)");
     }
