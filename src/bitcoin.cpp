@@ -41,7 +41,7 @@ std::string elliptic::Bitcoin::generatePrivateHex() {
  * Pads the beginning of string with zeros with the final length size being the 
  * given length.
  */
-std::string elliptic::Bitcoin::pad(const std::string& input, size_t length) {
+std::string elliptic::Bitcoin::pad(const std::string& input, std::size_t length) {
     if (length <= input.length()) {
         return input;
     }
@@ -135,7 +135,7 @@ bool elliptic::Bitcoin::validPrivateHex(const std::string& privateKey) {
  * Verifies that a WIF private key has the correct compression byte and length.
  */
 bool elliptic::Bitcoin::validWIF(const std::string& WIF) {
-    size_t length = WIF.length();
+    std::size_t length = WIF.length();
     if (length != WIF_LENGTH && length != WIF_LENGTH + 1) {
         return false;
     }
@@ -156,7 +156,7 @@ bool elliptic::Bitcoin::validWIF(const std::string& WIF) {
  * object.
  */
 bool elliptic::Bitcoin::getPoint(const std::string& publicKey, Point& p) {
-    size_t length = publicKey.length();
+    std::size_t length = publicKey.length();
     if (length != COMPRESSED && length != UNCOMPRESSED) {
         return false;
     }
@@ -193,7 +193,7 @@ bool elliptic::Bitcoin::getPoint(const std::string& publicKey, Point& p) {
  * hexadecimal strings and verifies they valid.
  */
 std::string elliptic::Bitcoin::convertToPrivateHex(const std::string& privateKey) {
-    size_t length = privateKey.length();
+    std::size_t length = privateKey.length();
     std::string privateHex = privateKey;
     if (length == WIF_LENGTH || length == WIF_LENGTH + 1) {
         privateHex = WIFToPrivateHex(privateKey);

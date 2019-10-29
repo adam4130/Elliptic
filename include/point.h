@@ -1,7 +1,7 @@
 #ifndef POINT_H
 #define POINT_H 
 
-#include <cstddef> // size_t
+#include <cstddef> // std::size_t
 #include <ostream> // std::ostream
 
 #include <gmpxx.h>

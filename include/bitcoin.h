@@ -16,7 +16,7 @@ namespace elliptic {
         Base58 base58_;
         Hash hash_;
         
-        std::string pad(const std::string& input, size_t length);
+        std::string pad(const std::string& input, std::size_t length);
         std::string toUpperCase(std::string input);
         std::string WIFToPrivateHex(const std::string& WIF);
         std::string diceToPrivateHex(const std::string& base6);
