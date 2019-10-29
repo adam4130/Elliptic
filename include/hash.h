@@ -3,21 +3,21 @@
 
 #include <cstddef> // size_t
 #include <cstdint> // uint_8
-#include <string>
-#include <vector>
+#include <string>  // std::string
+#include <vector>  // std::vector
 
 namespace elliptic {
 
     class Hash {
     private:
-        std::vector<uint8_t> hexToByte(const std::string& input);
-        std::string byteToHex(uint8_t* input, int length);
+        std::vector<uint8_t> hexToByte(const std::string& input) const;
+        std::string byteToHex(uint8_t* input, int length) const;
 
     public:
-        std::string sha256(const std::string& input);
-        std::string ripemd160(const std::string& input);
+        std::string sha256(const std::string& input) const;
+        std::string ripemd160(const std::string& input) const;
 
-        std::string getRandom(size_t bytes);
+        std::string getRandom(size_t bytes) const;
     };
 
 }

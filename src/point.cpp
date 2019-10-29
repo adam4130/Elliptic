@@ -1,5 +1,6 @@
 #include "point.h"
 
+#include <cstddef>    // size_t
 #include <functional> // std::hash
 #include <string>     // Std::string
 
@@ -23,4 +24,3 @@ std::size_t elliptic::PointHasher::operator()(const Point& p) const {
 
     return seed;
 }
-

@@ -1,6 +1,7 @@
 #ifndef POINT_H
 #define POINT_H 
 
+#include <cstddef> // size_t
 #include <ostream> // std::ostream
 
 #include <gmpxx.h>
@@ -15,10 +16,10 @@ namespace elliptic {
         Point() : x_(0), y_(0) {}
         Point(mpz_class x, mpz_class y) : x_(x), y_(y) {}
 
-        bool isZero() const { return sgn(x_) == 0 && sgn(y_) == 0; }
-
         mpz_class getX() const { return x_; }
         mpz_class getY() const { return y_; }
+
+        bool isZero() const { return sgn(x_) == 0 && sgn(y_) == 0; }
 
         bool operator==(const Point &p) const { return cmp(x_, p.x_) == 0 && cmp(y_, p.y_) == 0; }
     };
