@@ -5,7 +5,17 @@
 
 namespace elliptic {
 
-    Point babyGiant(const Curve& c, const mpz_class& n);
+    class BabyGiant {
+    private:
+        static const long MEMORY_LIMIT;
+
+        Curve* curve_;
+
+    public:
+        BabyGiant(Curve* curve) : curve_(curve) {}
+
+        mpz_class discreteLogarithm(const Point& P, const Point& G) const;
+    };
 
 }
 
