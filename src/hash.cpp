@@ -18,10 +18,10 @@ std::vector<std::uint8_t> elliptic::Hash::hexToByte(const std::string& input) co
         throw std::invalid_argument("Input must have an even number of characters");
     }
 
-    int length = input.length() / 2;
+    std::size_t length = input.length() / 2;
     std::vector<std::uint8_t> output;
     output.reserve(length);
-    for (int i = 0; i < length; i++) {
+    for (std::size_t i = 0; i < length; i++) {
         std::string value = input.substr(i * 2, 2);
         if (!std::isxdigit(value[0]) || !std::isxdigit(value[1])) {
             throw std::invalid_argument("Input is not a valid hexadecimal string");
@@ -36,9 +36,9 @@ std::vector<std::uint8_t> elliptic::Hash::hexToByte(const std::string& input) co
 /**
  * Converts a uint8_t (byte) array pointer to a hexadecimal string.
  */
-std::string elliptic::Hash::byteToHex(std::uint8_t* input, int length) const {
+std::string elliptic::Hash::byteToHex(std::uint8_t* input, std::size_t length) const {
     std::stringstream ss;
-    for (int i = 0; i < length; i++) {
+    for (std::size_t i = 0; i < length; i++) {
         ss << std::hex << std::setw(2) << std::setfill('0') << (int) input[i];
     }
 
