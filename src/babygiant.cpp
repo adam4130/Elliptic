@@ -1,14 +1,36 @@
 #include "babygiant.h"
 
+#include <cstdlib>       // std::rand, std::srand
+#include <ctime>         // std::time
 #include <stdexcept>     // std::invalid_argument
 #include <unordered_map> // std::unordered_map
 
-const long elliptic::BabyGiant::MEMORY_LIMIT = 100000;
+const long elliptic::BabyGiant::MEMORY_LIMIT = 50000000;
 
 /**
- * Computes the discrete logarithm on the given elliptic curve i.e., finds k such
- * that kG = P. Has space and time complexity of O(\sqrt(n)) where n is the order
- * of the curve.
+ * Get a uniform random number in 0 to n - 1, inclusive. Seeding is done by the
+ * system time.
+ */
+mpz_class elliptic::BabyGiant::getRandom(mpz_class n) const {
+    gmp_randstate_t state;
+    gmp_randinit_mt(state);
+
+    std::srand(std::time(NULL));
+    gmp_randseed_ui(state, std::rand());
+
+    mpz_class random;
+    mpz_urandomm(random.get_mpz_t(), state, n.get_mpz_t());
+
+    gmp_randclear(state);
+
+    return random;
+}
+
+/**
+ * Computes a discrete logarithm on the given elliptic curve i.e., finds k such
+ * that kG = P. The basic algorithm has space and time complexity of O(\sqrt{n})
+ * where n is the order of the curve. Completeness is not guaranteed for \sqrt{n}
+ * greater than the memory limit.
  */
 mpz_class elliptic::BabyGiant::discreteLogarithm(const Point& P, const Point& G) const {
     if (!curve_->hasPoint(P) || !curve_->hasPoint(G)) {
@@ -30,9 +52,10 @@ mpz_class elliptic::BabyGiant::discreteLogarithm(const Point& P, const Point& G)
         map[jG] = j;
     }
 
+    mpz_class r = getRandom(m);
     Point mG = curve_->multiply(G, m);
-    Point imG = mG;
-    for (long i = 1; i <= size; i++) {
+    Point imG = curve_->multiply(mG, r);
+    for (mpz_class i = r; i <= m; i++) {
         // Q = P - imG
         Point Q = curve_->add(P, curve_->negatePoint(imG));
 

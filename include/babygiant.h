@@ -11,6 +11,8 @@ namespace elliptic {
 
         Curve* curve_;
 
+        mpz_class getRandom(mpz_class n) const;
+
     public:
         BabyGiant(Curve* curve) : curve_(curve) {}
 

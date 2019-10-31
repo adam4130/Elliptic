@@ -94,8 +94,7 @@ std::string elliptic::Bitcoin::diceToPrivateHex(const std::string& base6) const 
             + std::to_string(base6.length()) + " digits provided");
     }
 
-    mpz_class n;
-    n = 0;
+    mpz_class n = 0;
     for (char c : base6) {
         if (c < '0' || c > '5') {
             throw std::invalid_argument("Base-6 key is invalid"); 
@@ -251,7 +250,7 @@ std::string elliptic::Bitcoin::privateHexToPublicKey(const std::string& privateK
  * Converts a hexadecimal public key to an address. 
  */
 std::string elliptic::Bitcoin::publicKeyToAddress(const std::string& publicKey) const {
-    Point p = getPoint(publicKey);
+    getPoint(publicKey); // Throws exception if public key is not valid
 
     std::string sha = hash_.sha256(publicKey);
     std::string rip = hash_.ripemd160(sha); 
