@@ -97,18 +97,18 @@ elliptic::Point elliptic::Curve::multiply(Point p) const {
         return p;
     }
 
-    mpz_class x, y, lambda, num, denom;
-    mpz_powm_ui(num.get_mpz_t(), p.getX().get_mpz_t(), 2, prime_.get_mpz_t()); 
-    denom = 2*p.getY();
+    mpz_class squared;
+    mpz_powm_ui(squared.get_mpz_t(), p.getX().get_mpz_t(), 2, prime_.get_mpz_t());
 
     // lambda = (3*x^2 + a) / (2*y)
-    lambda = (3*num + a_)*inverse(denom); 
+    mpz_class lambda = (3*squared + a_)*inverse(2*p.getY());
 
+    mpz_class x;
     mpz_powm_ui(x.get_mpz_t(), lambda.get_mpz_t(), 2, prime_.get_mpz_t());
     x -= 2*p.getX();
     mpz_mod(x.get_mpz_t(), x.get_mpz_t(), prime_.get_mpz_t());
 
-    y = p.getX() - x;
+    mpz_class y = p.getX() - x;
     y *= lambda;
     y -= p.getY();
     mpz_mod(y.get_mpz_t(), y.get_mpz_t(), prime_.get_mpz_t());
