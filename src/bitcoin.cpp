@@ -38,7 +38,7 @@ std::string elliptic::Bitcoin::generatePrivateHex() const {
 }
 
 /**
- * Pads the beginning of string with zeros with the final length size being the 
+ * Pads the beginning of string with zeros with the final length size being the
  * given length.
  */
 std::string elliptic::Bitcoin::pad(const std::string& input, std::size_t length) const {
@@ -53,14 +53,14 @@ std::string elliptic::Bitcoin::pad(const std::string& input, std::size_t length)
  * Converts a string to upper case.
  */
 std::string elliptic::Bitcoin::toUpperCase(std::string input) const {
-    transform(input.begin(), input.end(), input.begin(), ::toupper); 
+    transform(input.begin(), input.end(), input.begin(), ::toupper);
 
     return input;
 }
 
 /**
  * Converts a hexadecimal private key to hexadecimal public key with matching
- * compression. If a given private key has the compressed WIF format, the 
+ * compression. If a given private key has the compressed WIF format, the
  * compressed public key will be returned and vise-versa.
  */
 std::string elliptic::Bitcoin::WIFToPrivateHex(const std::string& WIF) const {
@@ -70,34 +70,34 @@ std::string elliptic::Bitcoin::WIFToPrivateHex(const std::string& WIF) const {
 
     std::string hex = base58_.base58ToHex(WIF);
     std::string checkSum = hex.substr(hex.length() - 8, 8);
-    hex.erase(hex.length() - 8); 
+    hex.erase(hex.length() - 8);
     std::string sha = hash_.sha256(hash_.sha256(hex));
     if (checkSum.compare(sha.substr(0, 8)) != 0) {
-        throw std::invalid_argument("SHA-256 checksum is incorrect"); 
+        throw std::invalid_argument("SHA-256 checksum is incorrect");
     }
 
-    hex.erase(0, 2); 
+    hex.erase(0, 2);
     char compression = WIF[0];
     if (compression == 'K' || compression == 'L') {
         hex.erase(hex.length() - 2);
     }
 
-    return toUpperCase(hex); 
-} 
+    return toUpperCase(hex);
+}
 
 /**
  * Converts a dice private key (99 digits [0-5]) to a hexadecimal string.
  */
 std::string elliptic::Bitcoin::diceToPrivateHex(const std::string& base6) const {
     if (base6.length() != 99) {
-        throw std::invalid_argument("Dice key conversion requires 99 base-6 digits, " 
+        throw std::invalid_argument("Dice key conversion requires 99 base-6 digits, "
             + std::to_string(base6.length()) + " digits provided");
     }
 
     mpz_class n = 0;
     for (char c : base6) {
         if (c < '0' || c > '5') {
-            throw std::invalid_argument("Base-6 key is invalid"); 
+            throw std::invalid_argument("Base-6 key is invalid");
         }
 
         n *= 6;
@@ -117,7 +117,7 @@ bool elliptic::Bitcoin::validPrivateHex(const std::string& privateKey) const {
         return false;
     }
 
-    mpz_class key; 
+    mpz_class key;
     if (key.set_str(privateKey, 16) != 0) {
         return false;
     }
@@ -142,7 +142,7 @@ bool elliptic::Bitcoin::validWIF(const std::string& WIF) const {
     char compression = WIF[0];
     if (length == WIF_LENGTH && compression != '5') {
         return false;
-    } else if (length == WIF_LENGTH + 1 && compression != 'K' 
+    } else if (length == WIF_LENGTH + 1 && compression != 'K'
             && compression != 'L') {
         return false;
     }
@@ -163,14 +163,14 @@ elliptic::Point elliptic::Bitcoin::getPoint(const std::string& point) const {
     std::string key = point;
     if (length == COMPRESSED) {
         key = uncompressPublicKey(key);
-    } 
+    }
 
     if (key.substr(0, 2).compare("04") != 0) {
         throw std::invalid_argument("Compression byte is incorrect");
     }
 
     mpz_class x, y;
-    if (x.set_str(key.substr(2, HEX_LENGTH), 16) != 0 
+    if (x.set_str(key.substr(2, HEX_LENGTH), 16) != 0
             || y.set_str(key.substr(COMPRESSED, HEX_LENGTH), 16) != 0) {
         throw std::invalid_argument("Point is not a valid hexadecimal string");
     }
@@ -197,7 +197,7 @@ std::string elliptic::Bitcoin::convertToPrivateHex(const std::string& privateKey
     }
 
     if (!validPrivateHex(privateHex)) {
-        throw std::invalid_argument("Private key is invalid"); 
+        throw std::invalid_argument("Private key is invalid");
     }
 
     return privateHex;
@@ -206,10 +206,10 @@ std::string elliptic::Bitcoin::convertToPrivateHex(const std::string& privateKey
 /**
  * Converts hexadecimal private keys to WIF (wallet import format) private keys.
  */
-std::string elliptic::Bitcoin::privateHexToWIF(const std::string& privateKey, 
+std::string elliptic::Bitcoin::privateHexToWIF(const std::string& privateKey,
         bool compressed) const {
     if (!validPrivateHex(privateKey)) {
-        throw std::invalid_argument("Private key is invalid"); 
+        throw std::invalid_argument("Private key is invalid");
     }
 
     std::string WIF = "80" + privateKey;
@@ -217,18 +217,18 @@ std::string elliptic::Bitcoin::privateHexToWIF(const std::string& privateKey,
         WIF += "01";
     }
 
-    std::string sha = hash_.sha256(hash_.sha256(WIF)); 
-    return base58_.hexToBase58(WIF + sha.substr(0, 8)); 
+    std::string sha = hash_.sha256(hash_.sha256(WIF));
+    return base58_.hexToBase58(WIF + sha.substr(0, 8));
 }
 
 /**
  * Converts WIF (uncompressed or compressed) private keys to hexadecimal
  * strings.
  */
-std::string elliptic::Bitcoin::privateHexToPublicKey(const std::string& privateKey, 
+std::string elliptic::Bitcoin::privateHexToPublicKey(const std::string& privateKey,
         bool compressed) const {
     if (!validPrivateHex(privateKey)) {
-        throw std::invalid_argument("Private key is invalid"); 
+        throw std::invalid_argument("Private key is invalid");
     }
 
     mpz_class k;
@@ -244,21 +244,21 @@ std::string elliptic::Bitcoin::privateHexToPublicKey(const std::string& privateK
     }
 
     return toUpperCase(publicKey);
-} 
+}
 
 /**
- * Converts a hexadecimal public key to an address. 
+ * Converts a hexadecimal public key to an address.
  */
 std::string elliptic::Bitcoin::publicKeyToAddress(const std::string& publicKey) const {
     getPoint(publicKey); // Throws exception if public key is not valid
 
     std::string sha = hash_.sha256(publicKey);
-    std::string rip = hash_.ripemd160(sha); 
+    std::string rip = hash_.ripemd160(sha);
     rip = "00" + rip;
     sha = hash_.sha256(hash_.sha256(rip));
     rip += sha.substr(0, 8);
 
-    return base58_.hexToBase58(rip); 
+    return base58_.hexToBase58(rip);
 }
 
 /**
@@ -269,7 +269,7 @@ std::string elliptic::Bitcoin::uncompressPublicKey(const std::string& compressed
     if (compressed.length() != COMPRESSED || compressed[0] != '0') {
         throw std::invalid_argument("Compressed public key is invalid");
     }
-    
+
     char compression = compressed[1];
     if (compression != '2' && compression != '3') {
         throw std::invalid_argument("Compression byte is invalid");

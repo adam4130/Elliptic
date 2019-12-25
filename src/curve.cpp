@@ -29,7 +29,7 @@ mpz_class elliptic::Curve::getOrder() const {
  */
 bool elliptic::Curve::hasPoint(const Point& p) const {
     mpz_class left, right;
-    mpz_powm_ui(left.get_mpz_t(), p.getY().get_mpz_t(), 2, prime_.get_mpz_t()); 
+    mpz_powm_ui(left.get_mpz_t(), p.getY().get_mpz_t(), 2, prime_.get_mpz_t());
 
     mpz_powm_ui(right.get_mpz_t(), p.getX().get_mpz_t(), 3, prime_.get_mpz_t());
     right += a_*p.getX() + b_;
@@ -53,7 +53,7 @@ elliptic::Point elliptic::Curve::negatePoint(const Point &p) const {
  */
 elliptic::Point elliptic::Curve::add(Point p, Point q) const {
     // p + 0 = p
-    if (q.isZero()) { 
+    if (q.isZero()) {
         return p;
     }
 
@@ -75,7 +75,7 @@ elliptic::Point elliptic::Curve::add(Point p, Point q) const {
     mpz_class x, y, lambda, num, denom;
     num = p.getY() - q.getY();
     denom = p.getX() - q.getX();
-    lambda = num*inverse(denom); 
+    lambda = num*inverse(denom);
 
     mpz_powm_ui(x.get_mpz_t(), lambda.get_mpz_t(), 2, prime_.get_mpz_t());
     x -= p.getX() + q.getX();
@@ -145,12 +145,12 @@ elliptic::Point elliptic::Curve::multiply(Point p, mpz_class n) const {
  */
 mpz_class elliptic::Curve::inverse(const mpz_class& op) const {
     if (mpz_divisible_p(op.get_mpz_t(), prime_.get_mpz_t()) != 0) {
-        throw std::invalid_argument("Inverse does not exist"); 
+        throw std::invalid_argument("Inverse does not exist");
     }
 
     // Fermat's Little Theorem
-    mpz_class inv, exp = prime_ - 2; 
-    mpz_powm_sec(inv.get_mpz_t(), op.get_mpz_t(), exp.get_mpz_t(), prime_.get_mpz_t()); 
+    mpz_class inv, exp = prime_ - 2;
+    mpz_powm_sec(inv.get_mpz_t(), op.get_mpz_t(), exp.get_mpz_t(), prime_.get_mpz_t());
     return inv;
 }
 
