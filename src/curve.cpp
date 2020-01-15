@@ -72,16 +72,16 @@ elliptic::Point elliptic::Curve::add(Point p, Point q) const {
         return Point();
     }
 
-    mpz_class x, y, lambda, num, denom;
-    num = p.getY() - q.getY();
-    denom = p.getX() - q.getX();
-    lambda = num*inverse(denom);
+    mpz_class num = p.getY() - q.getY();
+    mpz_class denom = p.getX() - q.getX();
+    mpz_class lambda = num*inverse(denom);
 
+    mpz_class x;
     mpz_powm_ui(x.get_mpz_t(), lambda.get_mpz_t(), 2, prime_.get_mpz_t());
     x -= p.getX() + q.getX();
     mpz_mod(x.get_mpz_t(), x.get_mpz_t(), prime_.get_mpz_t());
 
-    y = p.getX() - x;
+    mpz_class y = p.getX() - x;
     y *= lambda;
     y -= p.getY();
     mpz_mod(y.get_mpz_t(), y.get_mpz_t(), prime_.get_mpz_t());
@@ -167,3 +167,4 @@ mpz_class elliptic::Curve::squareRoot(const mpz_class& op) const {
     mpz_powm(sqr.get_mpz_t(), op.get_mpz_t(), exp.get_mpz_t(), prime_.get_mpz_t());
     return sqr;
 }
+

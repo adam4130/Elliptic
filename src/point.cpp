@@ -24,3 +24,4 @@ std::size_t elliptic::PointHasher::operator()(const Point& p) const {
 
     return seed;
 }
+

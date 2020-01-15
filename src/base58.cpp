@@ -14,7 +14,7 @@ const std::string elliptic::Base58::BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZa
 std::string elliptic::Base58::hexToBase58(const std::string& input) const {
     mpz_class n;
     if (n.set_str(input, 16) != 0) {
-        throw std::invalid_argument(input + " is an invalid hex string"); 
+        throw std::invalid_argument(input + " is an invalid hex string");
     }
 
     std::stringstream ss;
@@ -27,7 +27,7 @@ std::string elliptic::Base58::hexToBase58(const std::string& input) const {
         if (input[i] != '0' || input[i+1] != '0') {
             break;
         }
-    
+
         ss << BASE58[0];
     }
 
@@ -54,3 +54,4 @@ std::string elliptic::Base58::base58ToHex(const std::string& input) const {
 
     return n.get_str(16);
 }
+

@@ -13,6 +13,7 @@ namespace elliptic {
         mpz_class discreteLogarithm(const Point& P, const Point& G) const;
     private:
         static const long MEMORY_LIMIT;
+
         Curve* curve_;
 
         mpz_class getRandom(mpz_class n) const;
@@ -23,3 +24,4 @@ namespace elliptic {
 }
 
 #endif
+

@@ -1,15 +1,11 @@
 #ifndef CURVE_H
-#define CURVE_H 
+#define CURVE_H
 
 #include "point.h"
 
 namespace elliptic {
 
     class Curve {
-    private:
-        int a_, b_;
-        mpz_class prime_;
-
     public:
         Curve(int a, int b, mpz_class prime);
         virtual ~Curve() {}
@@ -29,6 +25,9 @@ namespace elliptic {
 
         mpz_class inverse(const mpz_class& op) const;
         mpz_class squareRoot(const mpz_class& op) const;
+    private:
+        int a_, b_;
+        mpz_class prime_;
     };
 
 }
