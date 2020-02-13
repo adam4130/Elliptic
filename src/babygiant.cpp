@@ -12,23 +12,24 @@ const long elliptic::BabyGiant::MEMORY_LIMIT = 50000000;
  * where n is the order of the curve. Completeness is not guaranteed for \sqrt{n}
  * greater than the memory limit.
  */
-mpz_class elliptic::BabyGiant::discreteLogarithm(const Point& P, const Point& G) const {
-    if (!curve_->hasPoint(P) || !curve_->hasPoint(G)) {
-        throw std::invalid_argument("Public key or base point is not on the curve");
+mpz_class elliptic::BabyGiant::discreteLogarithm(const Curve& curve, const Point& G,
+        const Point& P) const {
+    if (!curve.hasPoint(G) || !curve.hasPoint(P)) {
+        throw std::invalid_argument("Base point or public key is not on the curve");
     }
 
-    mpz_class n = curve_->getOrder();
+    mpz_class n = curve.getOrder();
     mpz_class m = sqrt(n) + 1; // m = ceil(sqrt(n))
 
     std::unordered_map<Point, long, PointHasher> table;
-    populateTable(table, G, m);
+    populateTable(table, curve, G, m);
 
     mpz_class r = getRandom(m);
-    Point mG = curve_->multiply(G, m);
-    Point imG = curve_->multiply(mG, r);
+    Point mG = curve.multiply(G, m);
+    Point imG = curve.multiply(mG, r);
     for (mpz_class i = r; i <= m; i++) {
         // Q = P - imG
-        Point Q = curve_->add(P, curve_->negatePoint(imG));
+        Point Q = curve.add(P, curve.negatePoint(imG));
 
         if (table.find(Q) != table.end()) {
             long j = table[Q];
@@ -37,7 +38,7 @@ mpz_class elliptic::BabyGiant::discreteLogarithm(const Point& P, const Point& G)
             return k;
         }
 
-        imG = curve_->add(imG, mG);
+        imG = curve.add(imG, mG);
     }
 
     throw std::invalid_argument("Could not find k such that kG = P, increase memory limit");
@@ -48,7 +49,7 @@ mpz_class elliptic::BabyGiant::discreteLogarithm(const Point& P, const Point& G)
  * to their multiplier, j.
  */
 void elliptic::BabyGiant::populateTable(std::unordered_map<Point, long, PointHasher>& table,
-        const Point& G, mpz_class m) const {
+        const Curve& curve, const Point& G, mpz_class m) const {
     long size = MEMORY_LIMIT;
     if (cmp(MEMORY_LIMIT, m) > 0) {
         size = m.get_si();
@@ -56,7 +57,7 @@ void elliptic::BabyGiant::populateTable(std::unordered_map<Point, long, PointHas
 
     Point jG;
     for (long j = 1; j <= size; j++) {
-        jG = curve_->add(jG, G);
+        jG = curve.add(jG, G);
         table[jG] = j;
     }
 }
