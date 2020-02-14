@@ -27,7 +27,7 @@ mpz_class elliptic::BabyGiant::discreteLogarithm(const Curve& curve, const Point
     mpz_class r = getRandom(m);
     Point mG = curve.multiply(G, m);
     Point imG = curve.multiply(mG, r);
-    for (mpz_class i = r; i <= m; i++) {
+    for (mpz_class i = r; i < m + r; i++) {
         // Q = P - imG
         Point Q = curve.add(P, curve.negatePoint(imG));
 
@@ -63,7 +63,7 @@ void elliptic::BabyGiant::populateTable(std::unordered_map<Point, long, PointHas
 }
 
 /**
- * Get a uniform random number in 0 to n - 1, inclusive. Seeding is done by the
+ * Get a uniform random number in 1 to n, inclusive. Seeding is done by the
  * system time. This method should NOT be used to generate random numbers for
  * private keys (consider using `getRandom` in "hash.h" which relies on /dev/random).
  */
@@ -79,6 +79,6 @@ mpz_class elliptic::BabyGiant::getRandom(mpz_class n) const {
 
     gmp_randclear(state);
 
-    return random;
+    return random + 1; // Add 1 since `mpz_urandomm` generates 0 to n - 1
 }
 

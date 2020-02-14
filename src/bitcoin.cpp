@@ -1,5 +1,6 @@
 #include "bitcoin.h"
 
+#include <algorithm> // std::transform
 #include <cstdlib>   // std::system
 #include <stdexcept> // std::runtime_error, std::invalid_argument
 
@@ -193,12 +194,13 @@ std::string elliptic::Bitcoin::uncompressPublicKey(const std::string& compressed
  */
 std::string elliptic::Bitcoin::compressPublicKey(const std::string& uncompressed) const {
     Point p = getPoint(uncompressed);
-    std::string x = pad(p.getX().get_str(16), HEX_LENGTH);
-    if (mpz_even_p(p.getY().get_mpz_t()) != 0) {
-        return toUpperCase("02" + x);
-    }
+    std::string x = toUpperCase(pad(p.getX().get_str(16), HEX_LENGTH));
 
-    return toUpperCase("03" + x);
+    if (mpz_even_p(p.getY().get_mpz_t()) != 0) {
+        return "02" + x;
+    } else {
+        return "03" + x;
+    }
 }
 
 /**
@@ -309,7 +311,7 @@ std::string elliptic::Bitcoin::pad(const std::string& input, std::size_t length)
  * Converts a string to upper case.
  */
 std::string elliptic::Bitcoin::toUpperCase(std::string input) const {
-    transform(input.begin(), input.end(), input.begin(), ::toupper);
+    std::transform(input.begin(), input.end(), input.begin(), ::toupper);
 
     return input;
 }
