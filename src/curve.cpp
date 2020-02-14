@@ -17,11 +17,22 @@ elliptic::Curve::Curve(int a, int b, mpz_class prime) {
 }
 
 /**
- * Computes the order of this curve in O(log^8 p) time with Schoof's algorithm.
+ * Naive order computation with O(p^2) complexity. Currently, this function must
+ * be overridden with the known value when using with reasonable curves e.g.,
+ * secp256k1.
+ * TODO Implement Schoof's algorithm which computes the order in O(log^8 p) time.
  */
 mpz_class elliptic::Curve::getOrder() const {
-    // TODO Implement Schoof's algorithm
-    return 0;
+    mpz_class order = 0;
+    for (mpz_class x = 0; x < prime_; x++) {
+      for (mpz_class y = 0; y < prime_; y++) {
+        if (hasPoint(Point(x, y))) {
+          order++;
+        }
+      }
+    }
+
+    return order + 1; // Add identity element
 }
 
 /**
