@@ -3,7 +3,6 @@
 
 #include <memory> // std::unique_ptr
 
-#include "base58.h"
 #include "secp256k1.h"
 #include "hash.h"
 
@@ -30,7 +29,6 @@ namespace elliptic {
         static const std::string BASE_POINT;
 
         std::unique_ptr<Curve> curve_;
-        Base58 base58_;
         Hash hash_;
 
         bool validPrivateHex(const std::string& privateKey) const;

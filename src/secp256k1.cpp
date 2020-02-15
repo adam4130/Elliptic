@@ -12,7 +12,7 @@ const std::string elliptic::Secp256k1::ORDER = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE
 /**
  * Converts a hexadecimal string to an arbitrary precision data type.
  */
-mpz_class elliptic::Secp256k1::convertHex(const std::string& hexString) const {
+mpz_class elliptic::Secp256k1::convertHex(const std::string& hexString) {
     mpz_class value;
     if (value.set_str(hexString, 16) != 0) {
         throw std::invalid_argument("Unable to convert hexadecimal string");

@@ -4,6 +4,8 @@
 #include <cstdlib>   // std::system
 #include <stdexcept> // std::runtime_error, std::invalid_argument
 
+#include "base58.h"
+
 const int elliptic::Bitcoin::HEX_LENGTH = 64;
 const int elliptic::Bitcoin::WIF_LENGTH = 51;
 const int elliptic::Bitcoin::COMPRESSED = 66;
@@ -106,7 +108,7 @@ std::string elliptic::Bitcoin::privateHexToWIF(const std::string& privateKey,
     }
 
     std::string sha = hash_.sha256(hash_.sha256(WIF));
-    return base58_.hexToBase58(WIF + sha.substr(0, 8));
+    return Base58::hexToBase58(WIF + sha.substr(0, 8));
 }
 
 /**
@@ -146,7 +148,7 @@ std::string elliptic::Bitcoin::publicKeyToAddress(const std::string& publicKey) 
     sha = hash_.sha256(hash_.sha256(rip));
     rip += sha.substr(0, 8);
 
-    return base58_.hexToBase58(rip);
+    return Base58::hexToBase58(rip);
 }
 
 /**
@@ -255,7 +257,7 @@ std::string elliptic::Bitcoin::WIFToPrivateHex(const std::string& WIF) const {
         throw std::invalid_argument("WIF private key is invalid");
     }
 
-    std::string hex = base58_.base58ToHex(WIF);
+    std::string hex = Base58::base58ToHex(WIF);
     std::string checkSum = hex.substr(hex.length() - 8, 8);
     hex.erase(hex.length() - 8);
     std::string sha = hash_.sha256(hash_.sha256(hex));

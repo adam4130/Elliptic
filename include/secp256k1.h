@@ -14,7 +14,7 @@ namespace elliptic {
         static const int A, B;
         static const std::string PRIME, ORDER;
 
-        mpz_class convertHex(const std::string& hexString) const;
+        static mpz_class convertHex(const std::string& hexString);
     };
 
 }

@@ -9,13 +9,13 @@ namespace elliptic {
 
     class BabyGiant {
     public:
-        mpz_class discreteLogarithm(const Curve& curve, const Point& G, const Point& P) const;
+        static mpz_class discreteLogarithm(const Curve& curve, const Point& G, const Point& P);
     private:
         static const long MEMORY_LIMIT;
 
-        mpz_class getRandom(mpz_class n) const;
-        void populateTable(std::unordered_map<Point, long, PointHasher>& table,
-            const Curve& curve, const Point& G, mpz_class m) const;
+        static mpz_class getRandom(mpz_class n);
+        static void populateTable(std::unordered_map<Point, long, PointHasher>& table,
+            const Curve& curve, const Point& G, mpz_class m);
     };
 
 }
