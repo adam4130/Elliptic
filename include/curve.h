@@ -3,7 +3,7 @@
 
 #include "point.h"
 
-namespace elliptic {
+namespace Elliptic {
 
     class Curve {
     public:

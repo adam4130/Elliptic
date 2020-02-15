@@ -6,12 +6,12 @@
 
 #include <boost/functional/hash.hpp> // boost::hash_combine, boost::hash_value
 
-std::ostream& elliptic::operator<<(std::ostream& out, const Point& p) {
+std::ostream& Elliptic::operator<<(std::ostream& out, const Point& p) {
     out << '(' << p.getX() << ',' << p.getY() << ')';
     return out;
 }
 
-std::size_t elliptic::PointHasher::operator()(const Point& p) const {
+std::size_t Elliptic::PointHasher::operator()(const Point& p) const {
     const std::string x = p.getX().get_str(10);
     const std::string y = p.getY().get_str(10);
 

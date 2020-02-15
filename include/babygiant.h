@@ -5,7 +5,7 @@
 
 #include "curve.h"
 
-namespace elliptic {
+namespace Elliptic {
 
     class BabyGiant {
     public:

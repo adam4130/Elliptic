@@ -3,7 +3,7 @@
 
 #include "curve.h"
 
-namespace elliptic {
+namespace Elliptic {
 
     class Secp256k1 : public Curve {
     public:

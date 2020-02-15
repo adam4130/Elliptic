@@ -4,7 +4,7 @@
 #include <ctime>         // std::time
 #include <stdexcept>     // std::invalid_argument
 
-const long elliptic::BabyGiant::MEMORY_LIMIT = 50000000;
+const long Elliptic::BabyGiant::MEMORY_LIMIT = 50000000;
 
 /**
  * Computes a discrete logarithm on the given elliptic curve i.e., finds k such
@@ -12,7 +12,7 @@ const long elliptic::BabyGiant::MEMORY_LIMIT = 50000000;
  * where n is the order of the curve. Completeness is not guaranteed for \sqrt{n}
  * greater than the memory limit.
  */
-mpz_class elliptic::BabyGiant::discreteLogarithm(const Curve& curve, const Point& G,
+mpz_class Elliptic::BabyGiant::discreteLogarithm(const Curve& curve, const Point& G,
         const Point& P) {
     if (!curve.hasPoint(G) || !curve.hasPoint(P)) {
         throw std::invalid_argument("Base point or public key is not on the curve");
@@ -48,7 +48,7 @@ mpz_class elliptic::BabyGiant::discreteLogarithm(const Curve& curve, const Point
  * Fills the given hash map with points, { jG | 1 <= j <= min(m, MEMORY_LIMIT) }, mapping
  * to their multiplier, j.
  */
-void elliptic::BabyGiant::populateTable(std::unordered_map<Point, long, PointHasher>& table,
+void Elliptic::BabyGiant::populateTable(std::unordered_map<Point, long, PointHasher>& table,
         const Curve& curve, const Point& G, mpz_class m) {
     long size = MEMORY_LIMIT;
     if (cmp(MEMORY_LIMIT, m) > 0) {
@@ -67,7 +67,7 @@ void elliptic::BabyGiant::populateTable(std::unordered_map<Point, long, PointHas
  * system time. This method should NOT be used to generate random numbers for
  * private keys (consider using `getRandom` in "hash.h" which relies on /dev/random).
  */
-mpz_class elliptic::BabyGiant::getRandom(mpz_class n) {
+mpz_class Elliptic::BabyGiant::getRandom(mpz_class n) {
     gmp_randstate_t state;
     gmp_randinit_mt(state);
 

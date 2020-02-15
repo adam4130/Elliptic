@@ -6,7 +6,7 @@
 #include "secp256k1.h"
 #include "hash.h"
 
-namespace elliptic {
+namespace Elliptic {
 
     class Bitcoin {
     public:

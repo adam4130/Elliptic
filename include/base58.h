@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace elliptic {
+namespace Elliptic {
 
     namespace Base58 {
 

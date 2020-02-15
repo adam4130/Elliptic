@@ -6,7 +6,7 @@
 
 #include <gmpxx.h>
 
-namespace elliptic {
+namespace Elliptic {
 
     class Point {
     public:

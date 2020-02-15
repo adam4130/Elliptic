@@ -2,7 +2,7 @@
 
 #include "bitcoin.h"
 
-using namespace elliptic;
+using namespace Elliptic;
 
 int main() {
     Bitcoin bitcoin;

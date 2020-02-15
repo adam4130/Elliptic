@@ -2,7 +2,7 @@
 
 #include "babygiant.h"
 
-using namespace elliptic;
+using namespace Elliptic;
 
 struct F {
     Curve curve;
@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE(logarithm) {
     mpz_class k = BabyGiant::discreteLogarithm(curve, G, P);
     BOOST_CHECK_EQUAL(k, 17);
 
-    elliptic::Point Q = curve.multiply(G, k);
+    Point Q = curve.multiply(G, k);
     BOOST_CHECK_EQUAL(P.getX(), Q.getX());
     BOOST_CHECK_EQUAL(P.getY(), Q.getY());
 }

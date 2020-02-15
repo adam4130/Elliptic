@@ -6,7 +6,7 @@
 #include <string>  // std::string
 #include <vector>  // std::vector
 
-namespace elliptic {
+namespace Elliptic {
 
     class Hash {
     public:
