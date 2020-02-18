@@ -25,11 +25,11 @@ Elliptic::Curve::Curve(int a, int b, mpz_class prime) {
 mpz_class Elliptic::Curve::getOrder() const {
     mpz_class order = 0;
     for (mpz_class x = 0; x < prime_; x++) {
-      for (mpz_class y = 0; y < prime_; y++) {
-        if (hasPoint(Point(x, y))) {
-          order++;
+        for (mpz_class y = 0; y < prime_; y++) {
+            if (hasPoint(Point(x, y))) {
+                order++;
+            }
         }
-      }
     }
 
     return order + 1; // Add identity element
