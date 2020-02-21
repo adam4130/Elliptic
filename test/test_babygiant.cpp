@@ -5,10 +5,11 @@
 using namespace Elliptic;
 
 struct F {
-    Curve curve;
+    Curve* curve;
     Point G;
 
-    F() : curve(0, 7, 37), G(16, 12) {}
+    F() : curve(new Curve(0, 7, 37)), G(16, 12) {}
+    ~F() { delete curve; }
 };
 
 BOOST_FIXTURE_TEST_SUITE(babygiant, F)
@@ -20,7 +21,7 @@ BOOST_AUTO_TEST_CASE(logarithm) {
     mpz_class k = BabyGiant::discreteLogarithm(curve, G, P);
     BOOST_CHECK_EQUAL(k, 17);
 
-    Point Q = curve.multiply(G, k);
+    Point Q = curve->multiply(G, k);
     BOOST_CHECK_EQUAL(P.getX(), Q.getX());
     BOOST_CHECK_EQUAL(P.getY(), Q.getY());
 }
