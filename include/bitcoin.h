@@ -35,9 +35,10 @@ namespace Elliptic {
         bool validWIF(const std::string& WIF) const;
 
         std::string WIFToPrivateHex(const std::string& WIF) const;
-        std::string diceToPrivateHex(const std::string& base6) const;
-        std::string pad(const std::string& input, std::size_t length) const;
-        std::string toUpperCase(std::string input) const;
+
+        static std::string diceToPrivateHex(const std::string& base6);
+        static std::string pad(const std::string& input, std::size_t length);
+        static std::string toUpperCase(std::string input);
     };
 
 }

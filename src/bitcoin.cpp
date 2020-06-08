@@ -41,7 +41,7 @@ std::string Elliptic::Bitcoin::generatePrivateHex() const {
 }
 
 /**
- * Converts a hexadecimal public key (compressed or uncompressed) into a Point.
+ * Converts a hexadecimal public key (compressed or uncompressed) into a Point (x,y).
  */
 Elliptic::Point Elliptic::Bitcoin::getPoint(const std::string& point) const {
     std::size_t length = point.length();
@@ -75,7 +75,7 @@ Elliptic::Point Elliptic::Bitcoin::getPoint(const std::string& point) const {
 
 /**
  * Converts WIF (uncompressed or compressed) and dice (99 digits [0-5]) keys to
- * hexadecimal strings and verifies they valid.
+ * hexadecimal strings and verifies they lie within the order of the curve.
  */
 std::string Elliptic::Bitcoin::convertToPrivateHex(const std::string& privateKey) const {
     std::size_t length = privateKey.length();
@@ -94,7 +94,7 @@ std::string Elliptic::Bitcoin::convertToPrivateHex(const std::string& privateKey
 }
 
 /**
- * Converts hexadecimal private keys to WIF (wallet import format) private keys.
+ * Converts a hexadecimal private key to a WIF (wallet import format) private key.
  */
 std::string Elliptic::Bitcoin::privateHexToWIF(const std::string& privateKey,
         bool compressed) const {
@@ -112,8 +112,9 @@ std::string Elliptic::Bitcoin::privateHexToWIF(const std::string& privateKey,
 }
 
 /**
- * Converts WIF (uncompressed or compressed) private keys to hexadecimal
- * strings.
+ * Converts a hexadecimal private key to hexadecimal public key with matching
+ * compression. If a given private key has the compressed WIF format, the
+ * compressed public key will be returned and vise-versa.
  */
 std::string Elliptic::Bitcoin::privateHexToPublicKey(const std::string& privateKey,
         bool compressed) const {
@@ -248,9 +249,8 @@ bool Elliptic::Bitcoin::validWIF(const std::string& WIF) const {
 }
 
 /**
- * Converts a hexadecimal private key to hexadecimal public key with matching
- * compression. If a given private key has the compressed WIF format, the
- * compressed public key will be returned and vise-versa.
+ * Converts a WIF (uncompressed or compressed) private key to a hexadecimal
+ * string.
  */
 std::string Elliptic::Bitcoin::WIFToPrivateHex(const std::string& WIF) const {
     if (!validWIF(WIF)) {
@@ -277,7 +277,7 @@ std::string Elliptic::Bitcoin::WIFToPrivateHex(const std::string& WIF) const {
 /**
  * Converts a dice private key (99 digits [0-5]) to a hexadecimal string.
  */
-std::string Elliptic::Bitcoin::diceToPrivateHex(const std::string& base6) const {
+std::string Elliptic::Bitcoin::diceToPrivateHex(const std::string& base6) {
     if (base6.length() != 99) {
         throw std::invalid_argument("Dice key conversion requires 99 base-6 digits, "
             + std::to_string(base6.length()) + " digits provided");
@@ -301,7 +301,7 @@ std::string Elliptic::Bitcoin::diceToPrivateHex(const std::string& base6) const 
  * Pads the beginning of string with zeros with the final length size being the
  * given length.
  */
-std::string Elliptic::Bitcoin::pad(const std::string& input, std::size_t length) const {
+std::string Elliptic::Bitcoin::pad(const std::string& input, std::size_t length) {
     if (length <= input.length()) {
         return input;
     }
@@ -312,7 +312,7 @@ std::string Elliptic::Bitcoin::pad(const std::string& input, std::size_t length)
 /**
  * Converts a string to upper case.
  */
-std::string Elliptic::Bitcoin::toUpperCase(std::string input) const {
+std::string Elliptic::Bitcoin::toUpperCase(std::string input) {
     std::transform(input.begin(), input.end(), input.begin(), ::toupper);
 
     return input;
